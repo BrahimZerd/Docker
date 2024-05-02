@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  node:
+    build: .
+    
+    #commande à éxécuter quand le build est complété :
+    #command: npm run dev
+    volumes:
+    #les volumes représentent les paths qui se situent entre l'hébergeur et le container
+      - .:/app/
+      - /app/node_modules
+    ports:
+    #mappage des ports utilisé par le containeur / et par le rendu utilisateur (3000 )
+      - "3000:3000"
+     #lancement de postgres avant nodejs 
+    depends_on:
+      - postgres
+    environment:
+    #variable d'environnement pour la database
+      DATABASE_URL: postgres://todoapp@postgres/todos
+  postgres:
+  #type d'image utilisé ici postgres
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_DB: test
